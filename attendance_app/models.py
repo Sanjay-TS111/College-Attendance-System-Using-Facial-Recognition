@@ -10,7 +10,7 @@ class Timetable(models.Model):
 
 class Student(models.Model):
     name = models.CharField(max_length=100)
-    face_encoding = models.BinaryField()  # Store serialized face encoding
+    face_encoding = models.BinaryField() 
 
 class Attendance(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)

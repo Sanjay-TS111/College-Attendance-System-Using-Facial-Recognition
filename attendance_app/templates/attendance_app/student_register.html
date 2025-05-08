@@ -168,7 +168,7 @@
 </head>
 <body>
 
-<!-- Navbar -->
+
 <nav>
     <div class="nav-left">
         <div class="logo">
@@ -181,7 +181,7 @@
     </div>
 </nav>
 
-<!-- Registration Form -->
+
 <div class="container">
     <h2>Student Face Registration</h2>
 
@@ -247,13 +247,13 @@
         }, 4000);
     }
 
-    // Redirect to dashboard if a success message is shown
+    
     window.addEventListener('DOMContentLoaded', () => {
         const successAlert = document.querySelector('.alert-success');
         if (successAlert && successAlert.textContent.includes("registered successfully")) {
             setTimeout(() => {
                 window.location.href = "/dashboard/";
-            }, 4000); // Wait 4 seconds before redirecting
+            }, 4000); 
         }
     });
 </script>

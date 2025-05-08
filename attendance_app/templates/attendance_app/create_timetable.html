@@ -225,7 +225,7 @@
     <main>
         <h1>Create Timetable</h1>
 
-        <!-- Display messages -->
+    
         {% if messages %}
             <ul class="messages">
                 {% for message in messages %}
@@ -234,7 +234,7 @@
             </ul>
         {% endif %}
 
-        <!-- Timetable form -->
+    
         <form method="POST">
             {% csrf_token %}
             {{ form.as_p }}
@@ -242,7 +242,7 @@
             <button type="submit">Create Timetable</button>
         </form>
 
-        <!-- List existing timetables -->
+    
         <div class="timetable-list">
             <h2>Your Timetables</h2>
             {% if timetables %}

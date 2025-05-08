@@ -226,5 +226,5 @@ def about(request):
 def delete_timetable(request, id):
     timetable = get_object_or_404(Timetable, id=id)
     timetable.delete()
-    return redirect('create_timetable')  # Use the name of your view that renders the timetable page
+    return redirect('create_timetable')  
 

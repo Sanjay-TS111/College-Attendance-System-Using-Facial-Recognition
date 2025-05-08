@@ -12,12 +12,12 @@ class TimetableForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Accept multiple time formats
+
         time_formats = [
-            '%I:%M%p',      # e.g., 1:37PM
-            '%I:%M %p',     # e.g., 1:37 PM (with space)
-            '%H:%M:%S',     # e.g., 13:37:00 (24-hour format, Django TimeField default)
-            '%H:%M',        # e.g., 13:37 (24-hour format)
+            '%I:%M%p',     
+            '%I:%M %p',     
+            '%H:%M:%S',     
+            '%H:%M',        
         ]
         self.fields['start_time'].input_formats = time_formats
         self.fields['end_time'].input_formats = time_formats
