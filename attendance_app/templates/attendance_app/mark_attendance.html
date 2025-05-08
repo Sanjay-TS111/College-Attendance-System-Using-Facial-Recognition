@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition Attendance</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #101522;
+            color: #e0e0e0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #1c1f2a;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #00d4ff;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #ccc;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+            margin-left: 20px;
+        }
+
+        .nav-links a:hover {
+            color: #00d4ff;
+        }
+
+
+        .main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        video {
+            border: 4px solid #00d4ff;
+            border-radius: 12px;
+            width: 600px;
+            height: 500px;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .messages {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            width: 800px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .success {
+            background-color: #2e7d32;
+            color: #c8e6c9;
+        }
+
+        .error {
+            background-color: #c62828;
+            color: #ffcdd2;
+        }
+
+        canvas {
+            position: absolute;
+            top: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        @media (max-width: 850px) {
+            video {
+                width: 100%;
+                height: auto;
+            }
+
+            .messages {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <div class="logo">
+                <img src="{% static 'attendance_app/images/logo2.png' %}" alt="Logo">
+                Attendance System
+            </div>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/about_page/">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main">
+        <h1>Face Recognition Attendance</h1>
+        <video id="videoElement" autoplay muted></video>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form id="attendanceForm" method="POST" action="{% url 'mark_attendance' %}">
+            {% csrf_token %}
+            <input type="hidden" name="image_data" id="imageData">
+        </form>
+    </div>
+
+    <script>
+        const video = document.getElementById("videoElement");
+        const imageDataInput = document.getElementById("imageData");
+        const form = document.getElementById("attendanceForm");
+        let isAttendanceMarked = false;
+
+        async function startVideo() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+                await video.play();
+                console.log("Camera started");
+            } catch (err) {
+                console.error("Camera error:", err);
+                alert("Please allow camera access.");
+            }
+        }
+
+        async function start() {
+            console.log("Loading models...");
+            try {
+                await faceapi.nets.tinyFaceDetector.loadFromUri('/static/models');
+                console.log("Models loaded");
+            } catch (err) {
+                console.error("Failed to load models:", err);
+                alert("Failed to load face detection models. Please check the server configuration.");
+                return;
+            }
+
+            startVideo();
+
+            video.addEventListener('play', async () => {
+                console.log("Video play event triggered");
+
+                await new Promise(resolve => video.onloadedmetadata = resolve);
+                const displaySize = { width: video.videoWidth, height: video.videoHeight };
+
+                const canvas = faceapi.createCanvasFromMedia(video);
+                document.body.append(canvas);
+                faceapi.matchDimensions(canvas, displaySize);
+
+                setInterval(async () => {
+                    if (isAttendanceMarked) return;
+
+                    let detections;
+                    try {
+                        detections = await faceapi.detectAllFaces(
+                            video,
+                            new faceapi.TinyFaceDetectorOptions({ inputSize: 128, scoreThreshold: 0.2 })
+                        );
+                    } catch (err) {
+                        console.error("Face detection failed:", err);
+                        return;
+                    }
+
+                    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+                    const resized = faceapi.resizeResults(detections, displaySize);
+                    faceapi.draw.drawDetections(canvas, resized);
+
+                    if (detections.length > 0) {
+                        const captureCanvas = document.createElement('canvas');
+                        captureCanvas.width = video.videoWidth;
+                        captureCanvas.height = video.videoHeight;
+                        const context = captureCanvas.getContext('2d');
+                        context.drawImage(video, 0, 0, captureCanvas.width, captureCanvas.height);
+
+                        const imageData = captureCanvas.toDataURL('image/jpeg');
+                        imageDataInput.value = imageData;
+
+                        isAttendanceMarked = true;
+                        form.submit();
+                    }
+                }, 1000);
+            });
+        }
+
+        window.onload = start;
+    </script>
+</body>
+</html>

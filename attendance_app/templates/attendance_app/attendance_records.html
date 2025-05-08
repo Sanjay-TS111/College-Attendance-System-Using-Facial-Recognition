@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Records</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #101522;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #1c1f2a;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #00d4ff;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #ccc;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+            margin-left: 30px;
+        }
+
+        .nav-links a:hover {
+            color: #00d4ff;
+        }
+
+        .nav-right .btn {
+            background-color: #00d4ff;
+            color: #101522;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-right .btn:hover {
+            background-color: #00a2cc;
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #1c1f2a;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #00d4ff;
+            margin-bottom: 1.5rem;
+        }
+
+        form.search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .search-form input[type="text"],
+        .search-form input[type="date"] {
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: none;
+            width: 200px;
+            background-color: #2a2e3d;
+            color: #e0e0e0;
+        }
+
+        .search-form button {
+            background-color: #00d4ff;
+            color: #101522;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-form button:hover {
+            background-color: #00a2cc;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #e0e0e0;
+        }
+
+        thead {
+            background-color: #00d4ff;
+            color: #101522;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #2a2e3d;
+        }
+
+        tr:hover {
+            background-color: #3a3f52;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 2rem;
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <div class="logo">
+                <img src="{% static 'attendance_app/images/logo2.png' %}" alt="Site Logo">
+                Attendance System
+            </div>
+            <div class="nav-links">
+                <a href="/dashboard/">Go Back</a>
+            </div>
+        </div>
+        <div class="nav-right" style="display: flex; gap: 10px;">
+            <a href="/login/" class="btn">Logout</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <h2>Attendance Records</h2>
+
+            <!-- Search Form -->
+            <form method="GET" class="search-form">
+                <input type="text" name="student" placeholder="Student Name" value="{{ request.GET.student }}">
+                <input type="text" name="subject" placeholder="Subject" value="{{ request.GET.subject }}">
+                <input type="date" name="date" value="{{ request.GET.date }}">
+                <button type="submit">Search</button>
+
+                <a href="{% url 'attendance_records' %}" style="text-decoration: none;">
+                  <button type="button">Reset</button>
+                </a>
+            </form>
+
+            {% if records %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Subject</th>
+                            <th>Status</th>
+                            <th>Date & Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in records %}
+                        <tr>
+                            <td>
+                              <a href="{% url 'student_detail' record.student.id %}" style="color: #00d4ff; text-decoration: none;">
+                                {{ record.student.name }}
+                            </a>
+                            
+                            </td>
+                          
+                            <td>{{ record.subject }}</td>
+                            <td>{{ record.status }}</td>
+                            <td>{{ record.timestamp }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No attendance records found.</p>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

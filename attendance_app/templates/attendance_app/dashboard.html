@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Detection | Security Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #101522;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #1c1f2a;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #00d4ff;
+        }
+
+        .logo img {
+            height: 60px;
+            width: auto;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #ccc;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #00d4ff;
+        }
+
+        .nav-right .btn {
+            background-color: #00d4ff;
+            color: #101522;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-right .btn:hover {
+            background-color: #00a2cc;
+        }
+
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            align-items: center;
+        }
+
+        .welcome {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .middle img {
+            height: 450px;
+            width: 450px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            max-width: 100%;
+        }
+
+        .register-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-left: 70px;
+        }
+
+        .register-btn button {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            background-color: #00d4ff;
+            color: #101522;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            min-width: 200px;
+        }
+
+        .register-btn button:hover {
+            background-color: #00a2cc;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .register-btn {
+                align-items: center
+                
+                
+            }
+        }
+        .welcome{
+            margin-right: 310px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <div class="logo">
+                <img src="{% static 'attendance_app/images/logo2.png' %}" alt="Site Logo">
+                Attendance System
+            </div>
+            <div class="nav-links">
+                <a href="/about_page/">About</a>
+            </div>
+        </div>
+        <div class="nav-right" style="display: flex; gap: 10px;">
+            <a href="/login/" class="btn">Logout</a>
+        </div>
+    </nav>
+
+    <div class="main">
+        <div class="welcome">Welcome, {{ user.username }}!</div>
+        <div class="content">
+            <div class="middle">
+                <img src="{% static 'attendance_app/images/index.png' %}" alt="Face Detection Image">
+            </div>
+            <div class="register-btn">
+                <button onclick="window.location.href='/student_register/'">Register Student</button>
+                <button onclick="window.location.href='/create_timetable/'">Create Timetable</button>
+                <button onclick="window.location.href='/attendance-record/'">Show Attendance</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

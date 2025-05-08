@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Face Detection System</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #101522;
+            color: #e0e0e0;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #1c1f2a;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #00d4ff;
+        }
+
+        .logo img {
+            height: 50px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #ccc;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #00d4ff;
+        }
+
+        .about-container {
+            padding: 4rem 2rem;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .about-container h1 {
+            color: #00d4ff;
+            margin-bottom: 1rem;
+        }
+
+        .about-container p {
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .about-container img {
+            width: 100%;
+            max-width: 500px;
+            margin-top: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">
+            <img src="{% static 'attendance_app/images/logo2.png' %}" alt="Logo">
+            Attendance System
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+        </div>
+    </nav>
+
+    <div class="about-container">
+        <h1>About Our Face Detection System</h1>
+        <p>
+            This system is designed to provide a secure, automated way to register and manage student attendance using facial recognition technology.
+            Built with Python, OpenCV, and Django, it captures faces via a webcam, detects and recognizes them, and stores attendance data securely.
+        </p>
+        <p>
+            Our goal is to eliminate manual attendance processes, prevent proxy attendance, and enhance school or institutional security.
+            The system supports both students and teachers, offering features like registration, login, real-time face detection, and attendance viewing.
+        </p>
+        <p>
+            This project is part of an academic initiative to explore the real-world application of computer vision in education and security environments.
+        </p>
+        <img src="{% static 'attendance_app/images/index.png' %}" alt="System Overview">
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Registration | FaceDetection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #101522;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #1c1f2a;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #00d4ff;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #ccc;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #00d4ff;
+        }
+
+        .nav-right .btn {
+            background-color: #00d4ff;
+            color: #101522;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-right .btn:hover {
+            background-color: #00a2cc;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            padding: 3rem 1rem;
+        }
+
+        .form-container {
+            background-color: #1c1f2a;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .form-container h2 {
+            color: #00d4ff;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ccc;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.6rem;
+            margin-bottom: 1.2rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #2c2f3a;
+            color: #fff;
+        }
+
+        input:focus {
+            outline: 2px solid #00d4ff;
+        }
+
+        button {
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #00d4ff;
+            color: #101522;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #00a2cc;
+        }
+
+        .messages {
+            margin-bottom: 1rem;
+        }
+
+        .messages p {
+            color: #ff6b6b;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        a {
+            display: block;
+            margin-top: 1.5rem;
+            color: #00d4ff;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="nav-left">
+            <div class="logo">
+                <img src="{% static 'attendance_app/images/logo2.png' %}" alt="Site Logo">
+                Attendance System
+            </div>
+        </div>
+
+        <div class="nav-right" style="display: flex; gap: 10px;">
+            <a href="/login/" class="btn">Teacher Login</a>
+        </div>
+    </nav>
+
+    <!-- Main Registration Form -->
+    <main>
+        <div class="form-container">
+            <h2>Teacher Registration</h2>
+
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <label>Username:</label>
+                <input type="text" name="username" required>
+
+                <label>Password:</label>
+                <input type="password" name="password" required>
+
+                <label>Confirm Password:</label>
+                <input type="password" name="confirm" required>
+
+                <button type="submit">Register</button>
+            </form>
+
+            <a href="{% url 'login' %}">Already have an account?</a>
+        </div>
+    </main>
+
+</body>
+</html>

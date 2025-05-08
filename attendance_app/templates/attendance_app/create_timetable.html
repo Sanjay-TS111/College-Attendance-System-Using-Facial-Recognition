@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Timetable</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #101522;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #1c1f2a;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #00d4ff;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #ccc;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+            margin-left: 30px;
+        }
+
+        .nav-links a:hover {
+            color: #00d4ff;
+        }
+
+        .nav-right .btn {
+            background-color: #00d4ff;
+            color: #101522;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-right .btn:hover {
+            background-color: #00a2cc;
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        h1, h2 {
+            color: #00d4ff;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #1c1f2a;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+        }
+
+        form p {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.6rem;
+            border-radius: 5px;
+            border: 1px solid #555;
+            background-color: #2c2f3a;
+            color: #e0e0e0;
+        }
+
+        button[type="submit"] {
+            background-color: #00d4ff;
+            color: #101522;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 1rem;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #00a2cc;
+            transform: scale(1.05);
+        }
+
+        .messages {
+            max-width: 600px;
+            margin: 1rem auto;
+            padding: 1rem;
+            border-radius: 6px;
+            background-color: #1c1f2a;
+        }
+
+        .messages li {
+            list-style-type: none;
+            padding: 0.3rem 0;
+        }
+
+        .success { color: #00ff7f; }
+        .error { color: #ff4d4d; }
+
+        .note {
+            font-size: 0.9rem;
+            color: #bbb;
+            margin-top: 0.5rem;
+        }
+
+        .timetable-list {
+            max-width: 600px;
+            margin: 2rem auto;
+            background-color: #1c1f2a;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+        }
+
+        .timetable-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .timetable-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .timetable-list li:last-child {
+            border-bottom: none;
+        }
+
+        .no-timetable {
+            text-align: center;
+            color: #aaa;
+        }
+
+        .delete-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.6rem;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background-color: darkred;
+        }
+
+        .delete-form {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <div class="logo">
+                <img src="{% static 'attendance_app/images/logo2.png' %}" alt="Site Logo">
+                Attendance System
+            </div>
+            <div class="nav-links">
+                <a href="/dashboard/">Goback</a>
+            </div>
+        </div>
+        <div class="nav-right" style="display: flex; gap: 10px;">
+            <a href="/login/" class="btn">Logout</a>
+        </div>
+    </nav>
+
+    <main>
+        <h1>Create Timetable</h1>
+
+        <!-- Display messages -->
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <!-- Timetable form -->
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <p class="note"><strong>Note:</strong> Enter times in 12-hour format (e.g., 1:37PM) or 24-hour format (e.g., 13:37).</p>
+            <button type="submit">Create Timetable</button>
+        </form>
+
+        <!-- List existing timetables -->
+        <div class="timetable-list">
+            <h2>Your Timetables</h2>
+            {% if timetables %}
+                <ul>
+                    {% for timetable in timetables %}
+                        <li>
+                            <span>{{ timetable.day_of_week }}: {{ timetable.subject_name }} from {{ timetable.start_time }} to {{ timetable.end_time }}</span>
+                            <form method="POST" action="{% url 'delete_timetable' timetable.id %}" class="delete-form">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-btn">Delete</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="no-timetable">No timetables created yet.</p>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

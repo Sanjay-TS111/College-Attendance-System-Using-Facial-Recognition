@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Detection | Security Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #101522;
+            color: #e0e0e0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #1c1f2a;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #00d4ff;
+        }
+
+        .logo img {
+            height: 60px;
+            width: auto;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #ccc;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #00d4ff;
+        }
+
+        .nav-right .btn {
+            background-color: #00d4ff;
+            color: #101522;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-right .btn:hover {
+            background-color: #00a2cc;
+        }
+
+        .main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            gap: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .middle img {
+            height: 450px;
+            width: 450px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .register-btn button {
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            background-color: #00d4ff;
+            color: #101522;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .register-btn button:hover {
+            background-color: #00a2cc;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .main {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .middle img {
+                width: 90%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <div class="logo">
+                <img src="{% static 'attendance_app/images/logo2.png' %}" alt="Site Logo">
+                Attendance System
+            </div>
+            <div class="nav-links">
+                <a href="/about_page/">About</a>
+            </div>
+        </div>
+
+        <div class="nav-right" style="display: flex; gap: 10px;">
+            <a href="/register/" class="btn login">Register Teacher</a>
+            <a href="/login/" class="btn">Teacher Login</a>
+        </div>
+    </nav>
+
+    <div id="message-container" style="width: 100%; text-align: center; min-height: 60px;">
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    <div class="flash-message" style="display: inline-block; padding: 10px 20px; margin: 10px auto; border-radius: 5px; color: #ff4d4d; background-color: #331010; border: 1px solid #ff4d4d;">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div class="flash-message" style="display: inline-block; padding: 10px 20px; margin: 10px auto; border-radius: 5px; color: #28e07d; background-color: #10331b; border: 1px solid #28e07d;">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+    
+            <script>
+                setTimeout(() => {
+                    const flashMessages = document.querySelectorAll('.flash-message');
+                    flashMessages.forEach(msg => {
+                        msg.style.display = 'none';
+                    });
+                }, 3000);
+            </script>
+        {% endif %}
+    </div>
+    
+
+    <div class="main">
+        <div class="middle">
+            <img src="{% static 'attendance_app/images/index.png' %}" alt="Face Detection Image">
+        </div>
+        <div class="register-btn">
+            <button onclick="window.location.href='/mark_attendance/'">Register Attendance</button>
+        </div>
+    </div>
+</body>
+</html>

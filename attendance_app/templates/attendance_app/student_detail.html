@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Records</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #101522;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #1c1f2a;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #00d4ff;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #ccc;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #00d4ff;
+        }
+
+        .nav-right .btn {
+            background-color: #00d4ff;
+            color: #101522;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-right .btn:hover {
+            background-color: #00a2cc;
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #1c1f2a;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #00d4ff;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .search-form input {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+            min-width: 200px;
+        }
+
+        .search-form button {
+            padding: 0.5rem 1rem;
+            background-color: #00d4ff;
+            border: none;
+            border-radius: 5px;
+            color: #101522;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #e0e0e0;
+        }
+
+        thead {
+            background-color: #00d4ff;
+            color: #101522;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #2a2e3d;
+        }
+
+        tr:hover {
+            background-color: #3a3f52;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 2rem;
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <div class="logo">
+                <img src="{% static 'attendance_app/images/logo2.png' %}" alt="Logo">
+                Attendance System
+            </div>
+            <div class="nav-links">
+                <a href="/dashboard/">Dashboard</a>
+                <a href="/attendance-record/">All Records</a>
+            </div>
+        </div>
+        <div class="nav-right">
+            <a href="/login/" class="btn">Logout</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <h2>Attendance Records</h2>
+
+            <!-- Search Form -->
+            <form method="GET" class="search-form">
+                <input type="text" name="subject" placeholder="Search by Subject" value="{{ request.GET.subject }}">
+                <input type="date" name="date" value="{{ request.GET.date }}">
+                <button type="submit">Search</button>
+
+            </form>
+
+            {% if records %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Subject</th>
+                            <th>Status</th>
+                            <th>Date & Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in records %}
+                        <tr>
+                            <td>{{ record.student.name }}</td>
+                            <td>{{ record.subject }}</td>
+                            <td>{{ record.status }}</td>
+                            <td>{{ record.timestamp }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No attendance records found.</p>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>
