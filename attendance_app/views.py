@@ -136,7 +136,7 @@ def register_view(request):
             messages.error(request, "Username already exists.")
         else:
             user = User.objects.create_user(username=username, password=password)
-            messages.success(request, f"Student {name} registered successfully.")
+            messages.success(request, f"Student  registered successfully.")
             return redirect('login')
     return render(request, 'attendance_app/register.html')
 
