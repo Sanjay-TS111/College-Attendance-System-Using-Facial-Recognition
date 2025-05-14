@@ -16,7 +16,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['*']  # You can restrict this for production
+ALLOWED_HOSTS = ['attendance-system-production-4f6e.up.railway.app', 'localhost', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
@@ -31,7 +31,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # for static file support
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -65,7 +65,7 @@ WSGI_APPLICATION = 'attendance_system.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',  # Switch to PostgreSQL for production (see optional change above)
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
@@ -90,7 +90,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
-USE_TZ = False
+USE_TZ = True  # Changed to True for better timestamp handling
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
@@ -110,9 +110,10 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Security settings only active in production
 if not DEBUG:
-    CSRF_TRUSTED_ORIGINS = ['https://attendance-system.up.railway.app']
+    CSRF_TRUSTED_ORIGINS = ['https://attendance-system-production-4f6e.up.railway.app']
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True  # Added to enforce HTTPS on Railway
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
